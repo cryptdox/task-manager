@@ -42,11 +42,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       email,
       password,
       options: {
-        emailRedirectTo: `${window.location.origin}/task-manager`, // 👈 redirect after email confirmation
+        emailRedirectTo: window.location.origin+'/task-manager', // 👈 redirect after email confirmation
       },
     });
     if (error) throw error;
   };
+  console.log("window.location.origin: ", window.location.origin)
 
   const signOut = async () => {
     const { error } = await supabase.auth.signOut();
