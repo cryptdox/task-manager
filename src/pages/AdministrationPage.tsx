@@ -225,14 +225,15 @@ export function AdministrationPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#f5f6fa] to-[#dcdde1] dark:from-[#2f3640] dark:to-[#353b48] py-8 transition-colors duration-300">
+    <div className="min-h-screen bg-gradient-to-br from-[#f5f6fa] to-[#dcdde1] dark:from-[#2f3640] dark:to-[#353b48] py-4 transition-colors duration-300">
       <div className="container mx-auto px-4">
         {/* <h1 className="text-4xl font-bold mb-8 text-gray-800 dark:text-white text-center">
           {t('admin.title')}
         </h1> */}
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className="space-y-6">
+        <div className="grid grid-cols-1 lg:grid-cols-1 gap-8">
+        {/* <div className="grid grid-cols-1 lg:grid-cols-2 gap-8"> */}
+          {/* <div className="space-y-6">
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
               <h2 className="text-2xl font-semibold mb-6 text-gray-800 dark:text-white">
                 {editingType ? t('admin.editType') : t('admin.createType')}
@@ -336,11 +337,11 @@ export function AdministrationPage() {
                 </div>
               )}
             </div>
-          </div>
+          </div> */}
 
           <div className="space-y-6">
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-              <h2 className="text-2xl font-semibold mb-6 text-gray-800 dark:text-white">
+              <h2 className="text-xl font-semibold mb-6 text-gray-800 dark:text-white">
                 {editingTag ? t('admin.editTag') : t('admin.createTag')}
               </h2>
 
@@ -367,7 +368,7 @@ export function AdministrationPage() {
                       <button
                         key={color}
                         onClick={() => setTagColor(color)}
-                        className={`w-10 h-10 rounded-lg transition-all transform hover:scale-110 ${tagColor === color ? 'ring-4 ring-offset-2 ring-gray-400 dark:ring-gray-600' : ''
+                        className={`w-8 h-8 rounded-lg transition-all transform hover:scale-110 ${tagColor === color ? 'ring-4 ring-offset-2 ring-gray-400 dark:ring-gray-600' : ''
                           }`}
                         style={{ backgroundColor: color }}
                       />
@@ -378,7 +379,7 @@ export function AdministrationPage() {
                 <div className="flex gap-3">
                   <button
                     onClick={handleCreateOrUpdateTag}
-                    className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#9c88ff] to-[#8c7ae6] text-white rounded-lg font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-300"
+                    className="flex items-center gap-2 px-6 py-2 bg-gradient-to-r from-[#9c88ff] to-[#8c7ae6] text-white rounded-lg font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-300"
                   >
                     {editingTag ? <Save className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
                     {t('admin.save')}
@@ -386,7 +387,7 @@ export function AdministrationPage() {
                   {editingTag && (
                     <button
                       onClick={resetTagForm}
-                      className="flex items-center gap-2 px-6 py-3 bg-gray-500 text-white rounded-lg font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-300"
+                      className="flex items-center gap-2 px-6 py-2 bg-gray-500 text-white rounded-lg font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-300"
                     >
                       <X className="w-5 h-5" />
                       {t('admin.cancel')}
@@ -397,7 +398,7 @@ export function AdministrationPage() {
             </div>
 
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6" id="task_tag">
-              <h2 className="text-2xl font-semibold mb-6 text-gray-800 dark:text-white">
+              <h2 className="text-xl font-semibold mb-6 text-gray-800 dark:text-white">
                 {t('admin.taskTags')} ({tags.length})
               </h2>
 

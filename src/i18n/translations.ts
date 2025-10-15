@@ -69,6 +69,8 @@ export const translations = {
       edit: 'Edit',
       noTasks: 'No tasks found',
       morning: 'Morning',
+      week: 'Week',
+      month: 'Month',
       day: 'Day',
       night: 'Night',
       all: 'All'
@@ -162,6 +164,8 @@ export const translations = {
       edit: 'সম্পাদনা',
       noTasks: 'কোন টাস্ক পাওয়া যায়নি',
       morning: 'সকাল',
+      week: 'সপ্তাহ',
+      month: 'মাস',
       day: 'দিন',
       night: 'রাত',
       all: 'সব'

@@ -14,6 +14,7 @@ export function TaskManagerPage() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [tags, setTags] = useState<TaskTag[]>([]);
   const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split('T')[0]);
+  const [dateRangeType, setDateRangeType] = useState<'day' | 'week' | 'month'>('day');
   const [selectedPeriod, setSelectedPeriod] = useState<TaskPeriod | 'all'>('all');
   const [selectedTag, setSelectedTag] = useState<string>('all');
 
@@ -41,7 +42,7 @@ export function TaskManagerPage() {
   }
 
   const setConfirm = (onConfirm: () => void, message: string = "Are you sure?") => {
-    setConfirmHandler(() => onConfirm); // store callback
+    setConfirmHandler(() => onConfirm);
     setConfirmMessage(message);
     setIsConfirmOpen(true);
   };
@@ -52,7 +53,6 @@ export function TaskManagerPage() {
   };
 
   const handleCancel = () => setIsConfirmOpen(false);
-
 
   useEffect(() => {
     if (user) {
@@ -67,9 +67,7 @@ export function TaskManagerPage() {
       .select('*')
       .eq('user_id', user!.id);
 
-    if (!error && data) {
-      setTags(data);
-    }
+    if (!error && data) setTags(data);
   };
 
   const loadTasks = async () => {
@@ -80,17 +78,16 @@ export function TaskManagerPage() {
       .order('date', { ascending: false })
       .order('created_at', { ascending: false });
 
-    if (!error && data) {
-      setTasks(data);
-    }
+    if (!error && data) setTasks(data);
   };
 
-  const filteredTasks = tasks.filter(task => {
-    const dateMatch = !selectedDate || task.date === selectedDate;
-    const periodMatch = selectedPeriod === 'all' || task.task_period === selectedPeriod;
-    const tagMatch = selectedTag === 'all' || task.task_tag === selectedTag;
-    return dateMatch && periodMatch && tagMatch;
-  });
+  const resetForm = () => {
+    setEditingTask(null);
+    setTaskText('');
+    setTaskPeriod('morning');
+    setTaskTag('');
+    setTaskDate(new Date().toISOString().split('T')[0]);
+  };
 
   const handleCreateOrUpdate = async () => {
     if (!taskText.trim()) return;
@@ -109,13 +106,6 @@ export function TaskManagerPage() {
         .update(taskData)
         .eq('id', editingTask.id);
 
-      const targetId = "tasks"
-      const element = document.getElementById(targetId);
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth", block: "start" });
-      } else {
-        console.warn(`Element with id "${targetId}" not found.`);
-      }
       setNotification("Successfully updated!")
       if (!error) {
         loadTasks();
@@ -125,13 +115,7 @@ export function TaskManagerPage() {
       const { error } = await supabase
         .from('task')
         .insert([taskData]);
-      const targetId = "tasks"
-      const element = document.getElementById(targetId);
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth", block: "start" });
-      } else {
-        console.warn(`Element with id "${targetId}" not found.`);
-      }
+
       setNotification("Successfully created!")
       if (!error) {
         loadTasks();
@@ -156,47 +140,156 @@ export function TaskManagerPage() {
       .eq('id', id);
 
     setNotification("Successfully deleted!", "info")
-    if (!error) {
-      loadTasks();
+    if (!error) loadTasks();
+  };
+
+  // -------------------
+  // Date Range Helpers
+  // -------------------
+  const getRangeDisplay = () => {
+    const date = new Date(selectedDate);
+    if (dateRangeType === 'day') {
+      return date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
+    }
+    if (dateRangeType === 'week') {
+      const startOfWeek = new Date(date);
+      startOfWeek.setDate(date.getDate() - date.getDay()); // Sunday
+      const endOfWeek = new Date(startOfWeek);
+      endOfWeek.setDate(startOfWeek.getDate() + 6);
+      return `${startOfWeek.toLocaleDateString()} - ${endOfWeek.toLocaleDateString()}`;
+    }
+    if (dateRangeType === 'month') {
+      const startOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
+      const endOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+      return `${startOfMonth.toLocaleDateString()} - ${endOfMonth.toLocaleDateString()}`;
     }
   };
 
-  const resetForm = () => {
-    setEditingTask(null);
-    setTaskText('');
-    setTaskPeriod('morning');
-    setTaskTag('');
-    setTaskDate(new Date().toISOString().split('T')[0]);
+  const incrementRange = () => {
+    const date = new Date(selectedDate);
+    const today = new Date();
+    if (dateRangeType === 'day') {
+      date.setDate(date.getDate() + 1);
+      if (date <= today) setSelectedDate(date.toISOString().split('T')[0]);
+    } else if (dateRangeType === 'week') {
+      date.setDate(date.getDate() + 7);
+      if (date <= today) setSelectedDate(date.toISOString().split('T')[0]);
+    } else if (dateRangeType === 'month') {
+      date.setMonth(date.getMonth() + 1);
+      if (date <= today) setSelectedDate(date.toISOString().split('T')[0]);
+    }
   };
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-[#f5f6fa] to-[#dcdde1] dark:from-[#2f3640] dark:to-[#353b48] py-8 transition-colors duration-300">
-      <div className="container mx-auto px-4">
-        {/* <h1 className="text-4xl font-bold mb-8 text-gray-800 dark:text-white text-center">
-          {t('taskManager.title')}
-        </h1> */}
+  const decrementRange = () => {
+    const date = new Date(selectedDate);
+    if (dateRangeType === 'day') {
+      date.setDate(date.getDate() - 1);
+    } else if (dateRangeType === 'week') {
+      date.setDate(date.getDate() - 7);
+    } else if (dateRangeType === 'month') {
+      date.setMonth(date.getMonth() - 1);
+    }
+    setSelectedDate(date.toISOString().split('T')[0]);
+  };
 
+  // -------------------
+  // Filter tasks based on range, period, tag
+  // -------------------
+  const filteredTasks = tasks.filter(task => {
+    const taskDateObj = new Date(task.date);
+    const selectedDateObj = new Date(selectedDate);
+
+    let inRange = false;
+    if (dateRangeType === 'day') {
+      inRange = task.date === selectedDate;
+    } else if (dateRangeType === 'week') {
+      const startOfWeek = new Date(selectedDateObj);
+      startOfWeek.setDate(selectedDateObj.getDate() - selectedDateObj.getDay());
+      const endOfWeek = new Date(startOfWeek);
+      endOfWeek.setDate(startOfWeek.getDate() + 6);
+      inRange = taskDateObj >= startOfWeek && taskDateObj <= endOfWeek;
+    } else if (dateRangeType === 'month') {
+      const startOfMonth = new Date(selectedDateObj.getFullYear(), selectedDateObj.getMonth(), 1);
+      const endOfMonth = new Date(selectedDateObj.getFullYear(), selectedDateObj.getMonth() + 1, 0);
+      inRange = taskDateObj >= startOfMonth && taskDateObj <= endOfMonth;
+    }
+
+    const periodMatch = selectedPeriod === 'all' || task.task_period === selectedPeriod;
+    const tagMatch = selectedTag === 'all' || task.task_tag === selectedTag;
+
+    return inRange && periodMatch && tagMatch;
+  });
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-[#f5f6fa] to-[#dcdde1] dark:from-[#2f3640] dark:to-[#353b48] py-4 transition-colors duration-300">
+      <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-1">
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 sticky top-24">
-              <h2 className="text-2xl font-semibold mb-6 text-gray-800 dark:text-white flex items-center gap-2">
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 lg:fixed top-20 lg:bottom-5 lg:left-30 lg:w-[320px] xl:w-[400px] space-y-6">
+              <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-white">
                 {t('taskManager.filters')}
               </h2>
-
-              <div className="space-y-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    {t('taskManager.date')}
-                  </label>
-                  <input
-                    type="date"
-                    value={selectedDate}
-                    onChange={(e) => setSelectedDate(e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#00a8ff] transition-all"
-                  />
+              {/* --- Date Range Filter --- */}
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <div className="relative">
+                    <input
+                      type="date"
+                      value={selectedDate}
+                      onChange={(e) => {
+                        setSelectedDate(e.target.value);
+                        setDateRangeType('day');
+                      }}
+                      className="w-9 h-9 opacity-0 absolute inset-0 cursor-pointer"
+                    />
+                    <div className="w-9 h-9 flex items-center justify-center bg-gray-200 dark:bg-gray-700 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 transition-all cursor-pointer">
+                      📅
+                    </div>
+                  </div>
+                  {['day', 'week', 'month'].map(type => (
+                    <button
+                      key={type}
+                      onClick={() => setDateRangeType(type as 'day' | 'week' | 'month')}
+                      className={`px-3 py-1 rounded-lg font-semibold transition-all ${dateRangeType === type
+                        ? 'bg-[#00a8ff] text-white'
+                        : 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-300'
+                        }`}
+                    >
+                      {t(`taskManager.${type}`)}
+                    </button>
+                  ))}
                 </div>
 
-                <div>
+                <div className="flex items-center mt-2">
+                  <button
+                    onClick={decrementRange}
+                    className="px-3 py-2 bg-gray-200 dark:bg-gray-700 rounded-l-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-all"
+                  >
+                    ◀
+                  </button>
+
+                  <div className="flex-1 text-center px-4 py-2 border-t border-b border-gray-300 dark:border-gray-600 bg-gradient-to-r from-[#00a8ff] to-[#9c88ff] text-white font-semibold shadow-md">
+                    {getRangeDisplay()}
+                  </div>
+
+                  <button
+                    onClick={incrementRange}
+                    className="px-3 py-2 bg-gray-200 dark:bg-gray-700 rounded-r-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-all"
+                  >
+                    ▶
+                  </button>
+                </div>
+              </div>
+
+              {/* --- Scrollable Filters (Period + Tag) --- */}
+              <div
+                className="overflow-y-auto"
+                style={{
+                  maxHeight: 'calc(100% - 10rem)', // adjust depending on header + date filter height
+                }}
+              >
+                {/* --- Period Filter --- */}
+                <div className="mb-6">
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     {t('taskManager.period')}
                   </label>
@@ -218,6 +311,7 @@ export function TaskManagerPage() {
                   </div>
                 </div>
 
+                {/* --- Tag Filter --- */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     {t('taskManager.tag')}
@@ -258,13 +352,11 @@ export function TaskManagerPage() {
             </div>
           </div>
 
+          {/* --- Tasks + Create Form --- */}
           <div className="lg:col-span-2 space-y-6">
-            
-            
-            
-            
+            {/* --- Create/Update Task --- */}
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-              <h2 className="text-2xl font-semibold mb-6 text-gray-800 dark:text-white">
+              <h2 className="text-xl font-semibold mb-6 text-gray-800 dark:text-white">
                 {editingTask ? t('taskManager.updateTask') : t('taskManager.createTask')}
               </h2>
 
@@ -277,14 +369,14 @@ export function TaskManagerPage() {
                     value={taskText}
                     onChange={(e) => setTaskText(e.target.value)}
                     className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#00a8ff] transition-all"
-                    rows={3}
+                    rows={1}
                     placeholder={t('taskManager.taskDescription')}
                   />
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    <label className="block text- font-medium text-gray-700 dark:text-gray-300 mb-2">
                       {t('taskManager.period')}
                     </label>
                     <select
@@ -332,7 +424,7 @@ export function TaskManagerPage() {
                 <div className="flex gap-3">
                   <button
                     onClick={handleCreateOrUpdate}
-                    className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#4cd137] to-[#44bd32] text-white rounded-lg font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-300"
+                    className="flex items-center gap-2 px-6 py-2 bg-gradient-to-r from-[#4cd137] to-[#44bd32] text-white rounded-lg font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-300"
                   >
                     {editingTask ? <Save className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
                     {editingTask ? t('taskManager.save') : t('taskManager.createTask')}
@@ -340,7 +432,7 @@ export function TaskManagerPage() {
                   {editingTask && (
                     <button
                       onClick={resetForm}
-                      className="flex items-center gap-2 px-6 py-3 bg-gray-500 text-white rounded-lg font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-300"
+                      className="flex items-center gap-2 px-6 py-2 bg-gray-500 text-white rounded-lg font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-300"
                     >
                       <X className="w-5 h-5" />
                       {t('taskManager.cancel')}
@@ -350,8 +442,9 @@ export function TaskManagerPage() {
               </div>
             </div>
 
+            {/* --- Task List --- */}
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6" id="tasks">
-              <h2 className="text-2xl font-semibold mb-6 text-gray-800 dark:text-white">
+              <h2 className="text-xl font-semibold mb-6 text-gray-800 dark:text-white">
                 Tasks ({filteredTasks.length})
               </h2>
 
@@ -361,14 +454,13 @@ export function TaskManagerPage() {
                 </p>
               ) : (
                 <div className="space-y-6">
-                  {/* Define task periods with colors */}
                   {[
                     { key: 'morning', color: 'text-yellow-500' },
                     { key: 'day', color: 'text-green-500' },
                     { key: 'night', color: 'text-purple-500' }
                   ].map(({ key, color }) => {
                     const tasksByPeriod = filteredTasks.filter(task => task.task_period === key);
-                    if (tasksByPeriod.length === 0) return null;
+                    if (!tasksByPeriod.length) return null;
 
                     return (
                       <div key={key}>
