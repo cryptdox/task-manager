@@ -47,7 +47,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
     if (error) throw error;
   };
-  console.log("window.location.origin: ", window.location.origin)
 
   const signOut = async () => {
     const { error } = await supabase.auth.signOut();
