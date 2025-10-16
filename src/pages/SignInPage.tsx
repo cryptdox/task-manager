@@ -1,9 +1,10 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { LogIn } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import { ParticleBackground } from '../components/ParticleBackground';
+import Notification from '../components/Notification';
 
 export function SignInPage() {
   const [email, setEmail] = useState('');
@@ -13,6 +14,20 @@ export function SignInPage() {
   const { signIn } = useAuth();
   const { t } = useLanguage();
   const navigate = useNavigate();
+
+  const [show, setShow] = useState(false);
+  const [message, setMessage] = useState("");
+  const [type, setType] = useState<"success" | "error" | "info" | "warning">();
+  const [duration, setDuration] = useState(4000)
+
+  useEffect(() => {
+    if(location.search.includes('send_confirm_email=true')){
+      setShow(true)
+      setMessage("Confirmation email send successfully!")
+      setType("success")
+      setDuration(4000)
+    }
+  }, [location.search]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -66,9 +81,17 @@ export function SignInPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                {t('auth.password')}
-              </label>
+              <div className="flex items-center justify-between mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  {t('auth.password')}
+                </label>
+                {/* <Link
+                  to="/forgot-password"
+                  className="text-sm text-[#00a8ff] hover:text-[#0097e6] font-medium transition-colors"
+                >
+                  {t('auth.forgotPassword')}
+                </Link> */}
+              </div>
               <input
                 type="password"
                 value={password}
@@ -106,6 +129,14 @@ export function SignInPage() {
           </div>
         </div>
       </div>
+
+      {show && (
+        <Notification
+          message={message}
+          type={type}
+          duration={duration}
+        />
+      )}
     </div>
   );
 }

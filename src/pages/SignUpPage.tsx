@@ -20,8 +20,13 @@ export function SignUpPage() {
     setLoading(true);
 
     try {
-      await signUp(email, password);
-      navigate('/task-manager');
+      let response = await signUp(email, password);
+      console.log('r: ', response?.user?.user_metadata?.email_verified, response)
+      const email_verified = response?.user?.user_metadata?.email_verified ?? true
+      email_verified ?
+        navigate('/task-manager')
+        :
+        navigate('/task-manager?send_confirm_email=true');
     } catch (err: any) {
       setError(err.message || 'Failed to sign up');
     } finally {

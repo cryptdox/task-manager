@@ -30,7 +30,7 @@ const Notification: React.FC<NotificationProps> = ({
 
   return (
     <div
-      className={`fixed top-20 right-6 flex items-center justify-between gap-4 px-4 py-3 rounded shadow-lg animate-slide-in ${typeClasses[type]}`}
+      className={`fixed top-20 right-6 flex items-center z-50 justify-between gap-4 px-4 py-3 rounded shadow-lg animate-slide-in ${typeClasses[type]}`}
       style={{ minWidth: "250px" }}
     >
       <span>{message}</span>

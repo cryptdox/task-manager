@@ -48,7 +48,13 @@ export const translations = {
       signInHere: 'Sign in here',
       signUpHere: 'Sign up here',
       signInButton: 'Sign In',
-      signUpButton: 'Create Account'
+      signUpButton: 'Create Account',
+      forgotPassword: 'Forgot Password?',
+      resetPassword: 'Reset Password',
+      sendResetLink: 'Send Reset Link',
+      backToSignIn: 'Back to Sign In',
+      resetLinkSent: 'Password reset link has been sent to your email',
+      resetDescription: 'Enter your email address and we will send you a link to reset your password'
     },
     taskManager: {
       title: 'Task Manager',
@@ -143,7 +149,13 @@ export const translations = {
       signInHere: 'এখানে সাইন ইন করুন',
       signUpHere: 'এখানে সাইন আপ করুন',
       signInButton: 'সাইন ইন',
-      signUpButton: 'অ্যাকাউন্ট তৈরি করুন'
+      signUpButton: 'অ্যাকাউন্ট তৈরি করুন',
+      forgotPassword: 'পাসওয়ার্ড ভুলে গেছেন?',
+      resetPassword: 'পাসওয়ার্ড রিসেট করুন',
+      sendResetLink: 'রিসেট লিংক পাঠান',
+      backToSignIn: 'সাইন ইনে ফিরে যান',
+      resetLinkSent: 'আপনার ইমেইলে পাসওয়ার্ড রিসেট লিংক পাঠানো হয়েছে',
+      resetDescription: 'আপনার ইমেইল ঠিকানা লিখুন এবং আমরা আপনাকে পাসওয়ার্ড রিসেট করার জন্য একটি লিংক পাঠাব'
     },
     taskManager: {
       title: 'টাস্ক ম্যানেজার',

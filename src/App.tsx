@@ -9,12 +9,13 @@ import { SignInPage } from './pages/SignInPage';
 import { SignUpPage } from './pages/SignUpPage';
 import { TaskManagerPage } from './pages/TaskManagerPage';
 import { AdministrationPage } from './pages/AdministrationPage';
+import { ForgotPasswordPage } from './pages/ForgotPasswordPage';
 
 function AppRoutes() {
   const { user } = useAuth();
   const location = useLocation();
 
-  const showHeader = location.pathname !== '/sign-in' && location.pathname !== '/sign-up';
+  const showHeader = location.pathname !== '/sign-in' && location.pathname !== '/sign-up' && location.pathname !== '/forgot-password';
 
   return (
     <>
@@ -23,6 +24,7 @@ function AppRoutes() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/sign-in" element={user ? <Navigate to="/task-manager" replace /> : <SignInPage />} />
         <Route path="/sign-up" element={user ? <Navigate to="/task-manager" replace /> : <SignUpPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route
           path="/task-manager"
           element={

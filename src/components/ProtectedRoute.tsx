@@ -3,6 +3,7 @@ import { useAuth } from '../contexts/AuthContext';
 
 export function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
+  console.log("window.location: ", window.location.search)
 
   if (loading) {
     return (
@@ -13,7 +14,7 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
   }
 
   if (!user) {
-    return <Navigate to="/sign-in" replace />;
+    return <Navigate to={`/sign-in${window.location.search}`} replace />;
   }
 
   return <>{children}</>;
