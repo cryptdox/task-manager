@@ -10,6 +10,7 @@ import { SignUpPage } from './pages/SignUpPage';
 import { TaskManagerPage } from './pages/TaskManagerPage';
 import { AdministrationPage } from './pages/AdministrationPage';
 import { ForgotPasswordPage } from './pages/ForgotPasswordPage';
+import { ResetPasswordPage } from './pages/ResetPasswordPage';
 
 function AppRoutes() {
   const { user } = useAuth();
@@ -25,6 +26,7 @@ function AppRoutes() {
         <Route path="/sign-in" element={user ? <Navigate to="/task-manager" replace /> : <SignInPage />} />
         <Route path="/sign-up" element={user ? <Navigate to="/task-manager" replace /> : <SignUpPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
         <Route
           path="/task-manager"
           element={

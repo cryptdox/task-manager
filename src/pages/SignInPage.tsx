@@ -85,12 +85,12 @@ export function SignInPage() {
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                   {t('auth.password')}
                 </label>
-                {/* <Link
+                <Link
                   to="/forgot-password"
                   className="text-sm text-[#00a8ff] hover:text-[#0097e6] font-medium transition-colors"
                 >
                   {t('auth.forgotPassword')}
-                </Link> */}
+                </Link>
               </div>
               <input
                 type="password"

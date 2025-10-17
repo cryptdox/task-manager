@@ -54,7 +54,13 @@ export const translations = {
       sendResetLink: 'Send Reset Link',
       backToSignIn: 'Back to Sign In',
       resetLinkSent: 'Password reset link has been sent to your email',
-      resetDescription: 'Enter your email address and we will send you a link to reset your password'
+      resetDescription: 'Enter your email address and we will send you a link to reset your password',
+      newPassword: 'New Password',
+      confirmPassword: 'Confirm Password',
+      updatePassword: 'Update Password',
+      passwordsDoNotMatch: 'Passwords do not match',
+      passwordUpdated: 'Password updated successfully',
+      enterNewPassword: 'Enter your new password below'
     },
     taskManager: {
       title: 'Task Manager',
@@ -155,7 +161,13 @@ export const translations = {
       sendResetLink: 'রিসেট লিংক পাঠান',
       backToSignIn: 'সাইন ইনে ফিরে যান',
       resetLinkSent: 'আপনার ইমেইলে পাসওয়ার্ড রিসেট লিংক পাঠানো হয়েছে',
-      resetDescription: 'আপনার ইমেইল ঠিকানা লিখুন এবং আমরা আপনাকে পাসওয়ার্ড রিসেট করার জন্য একটি লিংক পাঠাব'
+      resetDescription: 'আপনার ইমেইল ঠিকানা লিখুন এবং আমরা আপনাকে পাসওয়ার্ড রিসেট করার জন্য একটি লিংক পাঠাব',
+      newPassword: 'নতুন পাসওয়ার্ড',
+      confirmPassword: 'পাসওয়ার্ড নিশ্চিত করুন',
+      updatePassword: 'পাসওয়ার্ড আপডেট করুন',
+      passwordsDoNotMatch: 'পাসওয়ার্ড মিলছে না',
+      passwordUpdated: 'পাসওয়ার্ড সফলভাবে আপডেট হয়েছে',
+      enterNewPassword: 'নিচে আপনার নতুন পাসওয়ার্ড লিখুন'
     },
     taskManager: {
       title: 'টাস্ক ম্যানেজার',
