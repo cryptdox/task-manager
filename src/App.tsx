@@ -8,6 +8,7 @@ import { LandingPage } from './pages/LandingPage';
 import { SignInPage } from './pages/SignInPage';
 import { SignUpPage } from './pages/SignUpPage';
 import { TaskManagerPage } from './pages/TaskManagerPage';
+import { TaskStorePage } from './pages/TaskStorePage';
 import { AdministrationPage } from './pages/AdministrationPage';
 import { ForgotPasswordPage } from './pages/ForgotPasswordPage';
 import { ResetPasswordPage } from './pages/ResetPasswordPage';
@@ -32,6 +33,14 @@ function AppRoutes() {
           element={
             <ProtectedRoute>
               <TaskManagerPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/task-store"
+          element={
+            <ProtectedRoute>
+              <TaskStorePage />
             </ProtectedRoute>
           }
         />

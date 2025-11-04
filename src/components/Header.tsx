@@ -53,6 +53,14 @@ export function Header() {
                 {t('nav.taskManager')}
               </Link>
               <Link
+                to="/task-store"
+                className={`font-medium transition-colors hover:text-[#00a8ff] ${
+                  isActive('/task-store') ? 'text-[#00a8ff]' : 'text-gray-700 dark:text-gray-300'
+                }`}
+              >
+                {t('nav.taskStore')}
+              </Link>
+              <Link
                 to="/administration"
                 className={`font-medium transition-colors hover:text-[#00a8ff] ${
                   isActive('/administration') ? 'text-[#00a8ff]' : 'text-gray-700 dark:text-gray-300'
@@ -126,6 +134,15 @@ export function Header() {
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   {t('nav.taskManager')}
+                </Link>
+                <Link
+                  to="/task-store"
+                  className={`font-medium transition-colors hover:text-[#00a8ff] ${
+                    isActive('/task-store') ? 'text-[#00a8ff]' : 'text-gray-700 dark:text-gray-300'
+                  }`}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  {t('nav.taskStore')}
                 </Link>
                 <Link
                   to="/administration"

@@ -38,3 +38,17 @@ export interface TaskTagTaskType {
   task_tag_id: string;
   task_type_id: string;
 }
+
+export type ToDoTaskType = 'always' | 'one_time' | 'progress';
+
+export interface ToDoTask {
+  id: string;
+  to_do_type: ToDoTaskType;
+  parent_task: string | null;
+  description: string;
+  created_on: string; // ISO date string
+  task_tag: string | null;
+  archived: boolean;
+  user_id: string; // Supabase auth user ID
+}
+

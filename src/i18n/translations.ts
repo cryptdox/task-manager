@@ -6,6 +6,7 @@ export const translations = {
     nav: {
       home: 'Home',
       taskManager: 'Task Manager',
+      taskStore: 'Task Store',
       administration: 'Configure',
       signIn: 'Sign In',
       signUp: 'Sign Up',
@@ -103,6 +104,32 @@ export const translations = {
       edit: 'Edit',
       noTypes: 'No task types yet',
       noTags: 'No task tags yet'
+    },
+    taskStore: {
+      title: 'Task Store',
+      filters: 'Filters',
+      type: 'Type',
+      tags: 'Tags',
+      all: 'All',
+      oneTime: 'One Time',
+      always: 'Always',
+      progress: 'Progress',
+      createTask: 'Create Task',
+      editTask: 'Edit Task',
+      description: 'Description',
+      selectTag: 'Select Tag',
+      save: 'Save',
+      cancel: 'Cancel',
+      delete: 'Delete',
+      edit: 'Edit',
+      done: 'Done',
+      tasks: 'Tasks',
+      markDone: 'Mark as Done',
+      date: 'Date',
+      period: 'Period',
+      confirm: 'Confirm',
+      deleteTask: 'Delete Task',
+      deleteConfirmation: 'Are you sure you want to delete this task?'
     }
   },
   bn: {
@@ -113,6 +140,7 @@ export const translations = {
       home: 'হোম',
       taskManager: 'টাস্ক ম্যানেজার',
       // administration: 'প্রশাসন',
+      taskStore: 'টাস্ক স্টোর',
       administration: 'সেটিংস',
       signIn: 'সাইন ইন',
       signUp: 'সাইন আপ',
@@ -210,6 +238,32 @@ export const translations = {
       edit: 'সম্পাদনা',
       noTypes: 'এখনও কোন টাস্ক প্রকার নেই',
       noTags: 'এখনও কোন টাস্ক ট্যাগ নেই'
+    },
+    taskStore: {
+      title: 'টাস্ক স্টোর',
+      filters: 'ফিল্টার',
+      type: 'প্রকার',
+      tags: 'ট্যাগ',
+      all: 'সব',
+      oneTime: 'এককালীন',
+      always: 'সর্বদা',
+      progress: 'অগ্রগতি',
+      createTask: 'টাস্ক তৈরি করুন',
+      editTask: 'টাস্ক সম্পাদনা করুন',
+      description: 'বিবরণ',
+      selectTag: 'ট্যাগ নির্বাচন করুন',
+      save: 'সংরক্ষণ',
+      cancel: 'বাতিল',
+      delete: 'মুছুন',
+      edit: 'সম্পাদনা',
+      done: 'সম্পন্ন',
+      tasks: 'টাস্ক',
+      markDone: 'সম্পন্ন হিসেবে চিহ্নিত করুন',
+      date: 'তারিখ',
+      period: 'সময়কাল',
+      confirm: 'নিশ্চিত করুন',
+      deleteTask: 'টাস্ক মুছুন',
+      deleteConfirmation: 'আপনি কি এই টাস্কটি মুছতে নিশ্চিত?'
     }
   }
 };
