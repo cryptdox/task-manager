@@ -33,6 +33,9 @@ export function TaskManagerPage() {
   const [confirmMessage, setConfirmMessage] = useState<string>("");
   const [confirmHandler, setConfirmHandler] = useState<(() => void) | null>(null);
 
+  const [inProgress, setInProgress] = useState(false);
+
+
   const setNotification = (message: string, type: "success" | "error" | "info" | "warning" = "success", duration: number = 4000) => {
     setShow(true)
     setMessage(message)
@@ -91,6 +94,7 @@ export function TaskManagerPage() {
 
   const handleCreateOrUpdate = async () => {
     if (!taskText.trim()) return;
+    setInProgress(true)
 
     const taskData = {
       task: taskText,
@@ -122,6 +126,7 @@ export function TaskManagerPage() {
         resetForm();
       }
     }
+    setInProgress(false)
   };
 
   const handleEdit = (task: Task) => {
@@ -421,7 +426,7 @@ export function TaskManagerPage() {
                   </div>
                 </div>
 
-                <div className="flex gap-3">
+                <div className={`flex gap-3 ${inProgress && 'pointer-events-none'}`}>
                   <button
                     onClick={handleCreateOrUpdate}
                     className="flex items-center gap-2 px-6 py-2 bg-gradient-to-r from-[#4cd137] to-[#44bd32] text-white rounded-lg font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-300"
