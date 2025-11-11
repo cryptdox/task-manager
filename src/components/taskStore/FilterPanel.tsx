@@ -5,9 +5,11 @@ interface FilterPanelProps {
   tags: TaskTag[];
   selectedTag: string;
   onTagChange: (tagId: string) => void;
+  archived: boolean;
+  setArchived: (archive: boolean) => void;
 }
 
-export function FilterPanel({ tags, selectedTag, onTagChange }: FilterPanelProps) {
+export function FilterPanel({ tags, selectedTag, onTagChange, archived, setArchived }: FilterPanelProps) {
   const { t } = useLanguage();
 
   return (
@@ -46,6 +48,25 @@ export function FilterPanel({ tags, selectedTag, onTagChange }: FilterPanelProps
                 <span className="text-sm text-gray-700 dark:text-gray-300">{tag.name}</span>
               </label>
             ))}
+          </div>
+        </div>
+      </div>
+      <br/>
+      <div className="space-y-6">
+        <div>
+          <h3 className="text-sm font-medium mb-3 text-gray-700 dark:text-gray-300">{t('taskStore.archive')}</h3>
+          <div className="space-y-2">
+            <label className="flex items-center cursor-pointer hover:text-blue-600">
+              <input
+                type="checkbox"
+                name="archive"
+                value={archived? "Archived": "Not Archived"}
+                checked={archived}
+                onChange={(e) => setArchived(!archived)}
+                className="mr-3"
+              />
+              <span className="text-sm text-gray-700 dark:text-gray-300">{t('taskStore.all')}</span>
+            </label>
           </div>
         </div>
       </div>

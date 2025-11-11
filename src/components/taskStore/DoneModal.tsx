@@ -8,18 +8,20 @@ interface DoneModalProps {
   onSubmit: (data: {
     date: string;
     period: 'morning' | 'day' | 'night';
+    submit_type: 'complete' | 'complete_full';
+    note?: string;
   }) => void;
   onClose: () => void;
 }
 
 export function DoneModal({ task, onSubmit, onClose }: DoneModalProps) {
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
-  const [period, setPeriod] = useState<'morning' | 'day' | 'night'>('day');
+  const [period, setPeriod] = useState<'morning' | 'day' | 'night'>('morning');
+  const [note, setNote] = useState<string>('');
   const { t } = useLanguage();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSubmit({ date, period });
+  const handleSubmit = (submit_type: 'complete' | 'complete_full') => {
+    onSubmit({ date, period, submit_type, note });
   };
 
   return (
@@ -35,7 +37,7 @@ export function DoneModal({ task, onSubmit, onClose }: DoneModalProps) {
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form className="space-y-4">
           <div>
             <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
               {t('taskStore.description')}
@@ -43,6 +45,16 @@ export function DoneModal({ task, onSubmit, onClose }: DoneModalProps) {
             <p className="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg text-gray-900 dark:text-white break-words">
               {task.description}
             </p>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
+              {t('taskStore.note')}
+            </label>
+            <input className="w-full p-3 bg-gray-50 dark:bg-gray-700 rounded-lg text-gray-900 dark:text-white break-words"
+              value={note}
+              onChange={(e) => setNote(e.target.value)}
+            />
           </div>
 
           <div>
@@ -83,10 +95,21 @@ export function DoneModal({ task, onSubmit, onClose }: DoneModalProps) {
             </button>
             <button
               type="submit"
+              onClick={(e) => { e.preventDefault(); handleSubmit('complete') }}
               className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
             >
-              {t('taskStore.confirm')}
+              {t('taskStore.complete')}
             </button>
+            {
+              task.to_do_type == 'progress' &&
+              <button
+                type="button"
+                onClick={(e) => { e.preventDefault(); handleSubmit('complete_full') }}
+                className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition"
+              >
+                {t('taskStore.complete_full')}
+              </button>
+            }
           </div>
         </form>
       </div>

@@ -37,6 +37,10 @@ export function CreateForm({ editingTask, tags, onSave, onCancel }: CreateFormPr
       to_do_type: type,
       task_tag: tagId || null,
     });
+
+    setDescription('');
+    setType('one_time');
+    setTagId('');
   };
 
   return (
@@ -48,14 +52,15 @@ export function CreateForm({ editingTask, tags, onSave, onCancel }: CreateFormPr
       <div className="space-y-4">
         <div>
           <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
-            {t('taskStore.description')}
+            {t('taskManager.taskDescription')}
           </label>
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-            rows={3}
+            rows={1}
             required
+            placeholder={t('taskManager.taskDescription')}
           />
         </div>
 

@@ -15,6 +15,7 @@ export function TaskStorePage() {
 
   const [tasks, setTasks] = useState<ToDoTask[]>([]);
   const [tags, setTags] = useState<TaskTag[]>([]);
+  const [archived, setArchived] = useState<boolean>(false);
   const [selectedTag, setSelectedTag] = useState('all');
   const [editingTask, setEditingTask] = useState<ToDoTask | null>(null);
   const [deletingTask, setDeletingTask] = useState<ToDoTask | null>(null);
@@ -33,7 +34,7 @@ export function TaskStorePage() {
       const { data, error } = await supabase
         .from('task_tag')
         .select('*')
-        .eq('task_manager_user', user!.id);
+        .eq('user_id', user!.id);
 
       if (!error && data) {
         setTags(data);
@@ -102,30 +103,29 @@ export function TaskStorePage() {
     }
   };
 
-  const handleMarkDone = async (task: ToDoTask, data: { date: string; period: 'morning' | 'day' | 'night' }) => {
+  const handleMarkDone = async (task: ToDoTask, data: { date: string; period: 'morning' | 'day' | 'night', submit_type: 'complete' | 'complete_full', note?: string; }) => {
     setLoading(true);
     try {
+      let task_description = `[ ${data.submit_type === 'complete_full' ? 'Complete' : task.to_do_type != 'progress' ? 'Complete' : 'Update'} ] ${task.description}${data?.note && ` [ ${data?.note} ] `}`
       const newTask = {
-        task: task.description,
+        task: task_description,
         task_period: data.period,
         date: data.date,
         task_tag: task.task_tag,
-        task_manager_user: user!.id,
+        user_id: user!.id,
       };
-
       const { error: taskError } = await supabase
         .from('task')
         .insert([newTask]);
       if (taskError) throw taskError;
 
-      if (task.to_do_type === 'one_time' || task.to_do_type === 'progress') {
+      if (task.to_do_type === 'one_time' || (task.to_do_type === 'progress' && data?.submit_type === "complete_full")) {
         const { error: deleteError } = await supabase
           .from('to_do_task')
           .delete()
           .eq('id', task.id);
         if (deleteError) throw deleteError;
       }
-
       await loadTasks();
       setDoneTask(null);
     } catch (error) {
@@ -137,12 +137,13 @@ export function TaskStorePage() {
 
   const filteredTasks = selectedTag === 'all'
     ? tasks
-    : tasks.filter(task => task.task_tag === selectedTag);
+    : tasks.filter(task => task.task_tag === selectedTag && task.archived == archived);
+
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
+    <div className="min-h-screen bg-gray-50 dark:bg-[#2f3640] py-4">
       <div className="container mx-auto px-4">
-        <h1 className="text-3xl font-bold mb-8 text-gray-900 dark:text-white">{t('nav.taskStore')}</h1>
+        {/* <h1 className="text-3xl font-bold mb-8 text-gray-800 dark:text-white">{t('nav.taskStore')}</h1> */}
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           <div className="lg:col-span-1">
@@ -150,6 +151,8 @@ export function TaskStorePage() {
               tags={tags}
               selectedTag={selectedTag}
               onTagChange={setSelectedTag}
+              archived={archived}
+              setArchived={setArchived}
             />
           </div>
 
@@ -162,7 +165,7 @@ export function TaskStorePage() {
             />
 
             <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-lg">
-              <h2 className="text-2xl font-semibold mb-6 text-gray-900 dark:text-white">{t('taskStore.tasks')}</h2>
+              <h2 className="text-xl font-semibold mb-6 text-gray-800 dark:text-white">{t('taskStore.tasks')} ({filteredTasks.length})</h2>
 
               <div className="space-y-8">
                 <TypeView

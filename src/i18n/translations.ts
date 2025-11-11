@@ -108,6 +108,7 @@ export const translations = {
     taskStore: {
       title: 'Task Store',
       filters: 'Filters',
+      archive: 'Archive',
       type: 'Type',
       tags: 'Tags',
       all: 'All',
@@ -128,6 +129,9 @@ export const translations = {
       date: 'Date',
       period: 'Period',
       confirm: 'Confirm',
+      complete: 'Complete',
+      complete_full: 'Full Compelete',
+      note: "Note",
       deleteTask: 'Delete Task',
       deleteConfirmation: 'Are you sure you want to delete this task?'
     }
@@ -241,6 +245,7 @@ export const translations = {
     },
     taskStore: {
       title: 'টাস্ক স্টোর',
+      archive: 'আর্কাইভ',
       filters: 'ফিল্টার',
       type: 'প্রকার',
       tags: 'ট্যাগ',
@@ -262,6 +267,9 @@ export const translations = {
       date: 'তারিখ',
       period: 'সময়কাল',
       confirm: 'নিশ্চিত করুন',
+      complete: 'সম্পন্ন হয়েছে',
+      complete_full: 'সম্পুর্ণ সম্পন্ন হয়েছে',
+      note: "নোট",
       deleteTask: 'টাস্ক মুছুন',
       deleteConfirmation: 'আপনি কি এই টাস্কটি মুছতে নিশ্চিত?'
     }
