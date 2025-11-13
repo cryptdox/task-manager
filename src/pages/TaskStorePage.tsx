@@ -106,7 +106,7 @@ export function TaskStorePage() {
   const handleMarkDone = async (task: ToDoTask, data: { date: string; period: 'morning' | 'day' | 'night', submit_type: 'complete' | 'complete_full', note?: string; }) => {
     setLoading(true);
     try {
-      let task_description = `[ ${data.submit_type === 'complete_full' ? 'Complete' : task.to_do_type != 'progress' ? 'Complete' : 'Update'} ] ${task.description}${data?.note && ` [ ${data?.note} ] `}`
+      let task_description = `[${data.submit_type === 'complete_full' ? 'Complete' : task.to_do_type != 'progress' ? 'Complete' : 'Update'}] ${task.description}${data?.note && ` [${data?.note}] `}`
       const newTask = {
         task: task_description,
         task_period: data.period,
