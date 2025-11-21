@@ -12,6 +12,7 @@ import { TaskStorePage } from './pages/TaskStorePage';
 import { AdministrationPage } from './pages/AdministrationPage';
 import { ForgotPasswordPage } from './pages/ForgotPasswordPage';
 import { ResetPasswordPage } from './pages/ResetPasswordPage';
+import { VocabularyPage } from './pages/VocabularyPage';
 
 function AppRoutes() {
   const { user } = useAuth();
@@ -41,6 +42,14 @@ function AppRoutes() {
           element={
             <ProtectedRoute>
               <TaskStorePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/vocabulary"
+          element={
+            <ProtectedRoute>
+              <VocabularyPage />
             </ProtectedRoute>
           }
         />

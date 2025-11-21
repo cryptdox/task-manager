@@ -61,6 +61,14 @@ export function Header() {
                 {t('nav.taskStore')}
               </Link>
               <Link
+                to="/vocabulary"
+                className={`font-medium transition-colors hover:text-[#00a8ff] ${
+                  isActive('/vocabulary') ? 'text-[#00a8ff]' : 'text-gray-700 dark:text-gray-300'
+                }`}
+              >
+                {t('nav.vocabulary')}
+              </Link>
+              <Link
                 to="/administration"
                 className={`font-medium transition-colors hover:text-[#00a8ff] ${
                   isActive('/administration') ? 'text-[#00a8ff]' : 'text-gray-700 dark:text-gray-300'
@@ -143,6 +151,15 @@ export function Header() {
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   {t('nav.taskStore')}
+                </Link>
+                <Link
+                  to="/vocabulary"
+                  className={`font-medium transition-colors hover:text-[#00a8ff] ${
+                    isActive('/vocabulary') ? 'text-[#00a8ff]' : 'text-gray-700 dark:text-gray-300'
+                  }`}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  {t('nav.vocabulary')}
                 </Link>
                 <Link
                   to="/administration"

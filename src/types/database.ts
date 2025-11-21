@@ -52,3 +52,30 @@ export interface ToDoTask {
   user_id: string; // Supabase auth user ID
 }
 
+export type PartOfSpeech = 'noun' | 'verb' | 'adjective' | 'adverb' | 'preposition' | 'conjunction' | 'pronoun' | 'interjection' | 'article' | 'determiner' | 'numeral' | 'exclamation' | 'other';
+export type LanguageCode = 'en' | 'bn';
+export type RelationType = 'translation' | 'semantic' | 'contextual' | 'synonym' | 'antonym';
+
+export interface Vocabulary {
+  id: number;
+  language_code: LanguageCode;
+  text: string;
+  phonetic: string | null;
+  sentences: any[] | null;
+  note: string | null;
+  part_of_speech: PartOfSpeech | null;
+  is_draft: boolean;
+  created_by: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface VocabularyMap {
+  id: number;
+  source_id: number;
+  target_id: number;
+  relation_type: RelationType;
+  is_primary: boolean;
+  created_by: string;
+  created_at: string;
+}
