@@ -102,21 +102,33 @@ export function VocabularyPage() {
     if (!user) return;
     setLoading(true);
 
+    console.log("vocab: ", vocab)
+
     try {
+      let id
       if (editingVocab) {
-        const { error } = await supabase
+        const { data, error } = await supabase
           .from('vocabulary')
           .update(vocab)
           .eq('id', editingVocab.id);
         if (error) throw error;
+        console.log(data)
+        // id = data?.id
       } else {
-        const { error } = await supabase
+        if(!addingVocabulary){
+        const { data, error } = await supabase
           .from('vocabulary')
           .insert([{ ...vocab, created_by: user.id }]);
         if (error) throw error;
+        console.log(data)
+
+
+        // id = data?.id
+        }
       }
       await loadVocabs();
       setEditingVocab(null);
+      // return data
     } catch (error) {
       console.error('Error saving vocabulary:', error);
     } finally {

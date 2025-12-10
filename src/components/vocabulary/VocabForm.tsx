@@ -12,6 +12,7 @@ interface VocabFormProps {
 }
 
 export function VocabForm({ editingVocab, addingVocabulary, onSave, onCancel, loading }: VocabFormProps) {
+  const [id, setId] = useState(0);
   const [text, setText] = useState('');
   const [phonetic, setPhonetic] = useState('');
   const [partOfSpeech, setPartOfSpeech] = useState('');
@@ -96,10 +97,16 @@ export function VocabForm({ editingVocab, addingVocabulary, onSave, onCancel, lo
 
         // if (!isCancelled) {
         //   if (error) throw error;
+
+        if(id){
+          resetForm()
+          setId(0)
+        }
         setSearchResults(data || []);
-        if (data) {
+        if (data && !showDropdown && !id) {
           setShowDropdown(true)
         }
+
         //   setSearchError(null);
         // }
       } catch (error) {
@@ -122,6 +129,7 @@ export function VocabForm({ editingVocab, addingVocabulary, onSave, onCancel, lo
   }, [text, languageCode]);
 
   const handleSelectSuggestion = (vocab: Vocabulary) => {
+    setId(vocab?.id)
     setText(vocab.text);
     setPhonetic(vocab.phonetic || '');
     setPartOfSpeech(vocab.part_of_speech || '');
@@ -130,6 +138,7 @@ export function VocabForm({ editingVocab, addingVocabulary, onSave, onCancel, lo
     setLanguageCode(vocab.language_code);
     setIsDraft(vocab.is_draft);
     setSearchResults([]);
+    setShowDropdown(false);
     // setSearchError(null);
     // setIsInputFocused(false);
     // if (blurTimeoutRef.current) {
@@ -150,21 +159,48 @@ export function VocabForm({ editingVocab, addingVocabulary, onSave, onCancel, lo
     e.preventDefault();
     if (!text.trim()) return;
 
+
+
     const sentencesArray = sentences.trim() ? sentences.split('\n').filter(s => s.trim()) : [];
+    if (!id) {
+      onSave({
+        ...(editingVocab || {}),
+        text,
+        phonetic: phonetic || null,
+        part_of_speech: partOfSpeech as PartOfSpeech | null,
+        sentences: sentencesArray.length > 0 ? sentencesArray : null,
+        note: note || null,
+        language_code: languageCode,
+        is_draft: isDraft,
+      });
 
-    onSave({
-      ...(editingVocab || {}),
-      text,
-      phonetic: phonetic || null,
-      part_of_speech: partOfSpeech as PartOfSpeech | null,
-      sentences: sentencesArray.length > 0 ? sentencesArray : null,
-      note: note || null,
-      language_code: languageCode,
-      is_draft: isDraft,
-    });
-
-    if (!editingVocab) {
-      resetForm();
+      if (!editingVocab) {
+        resetForm();
+      }
+    } else{
+    // Create a new vocab entry in supabase, mapping with id and addingVocabulary.id
+    if (addingVocabulary && addingVocabulary.id) {
+      (async () => {
+        try {
+          const { error } = await supabase
+            .from('VocabularyMap')
+            .insert([
+              {
+                target_id: id,
+                source_id: addingVocabulary.id
+              }
+            ]);
+          if (error) {
+            console.error("Error mapping vocab ids:", error);
+            // Optionally: handle error UI feedback
+          } else {
+            // Optionally: show success / continue flow
+          }
+        } catch (err) {
+          console.error("Unexpected error mapping vocab ids:", err);
+        }
+      })();
+    }
     }
   };
 
@@ -224,8 +260,8 @@ export function VocabForm({ editingVocab, addingVocabulary, onSave, onCancel, lo
                       key={index}
                       className="px-3 py-2 hover:bg-blue-100 dark:hover:bg-gray-600 cursor-pointer"
                       onClick={() => {
-                        setText(item.text);
-                        setShowDropdown(false);
+                        // setText(item.text);
+                        handleSelectSuggestion(item)
                       }}
                     >
                       <span className='dark:text-white'>{item.text}</span>
