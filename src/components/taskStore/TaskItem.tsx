@@ -25,6 +25,15 @@ export function TaskItem({ task, tags, onEdit, onDelete, onDone }: TaskItemProps
       <div className="flex justify-between items-start gap-4">
         <div className="flex-1 min-w-0">
           <h3 className="text-lg font-medium text-gray-900 dark:text-white break-words">{task.description}</h3>
+          {task.note && (
+            <div
+              className="text-xs text-gray-500 dark:text-gray-400 mt-2 border-l-2 border-gray-300 pl-2"
+              style={{ whiteSpace: "pre-wrap" }}
+            >
+              {task.note}
+            </div>
+          )}
+
           <div className="mt-2 flex items-center gap-2 flex-wrap">
             <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs rounded-full capitalize">
               {task.to_do_type}

@@ -13,6 +13,7 @@ export function CreateForm({ editingTask, tags, onSave, onCancel }: CreateFormPr
   const [description, setDescription] = useState('');
   const [type, setType] = useState<'one_time' | 'always' | 'progress'>('one_time');
   const [tagId, setTagId] = useState('');
+  const [note, setNote] = useState<string>('');
   const { t } = useLanguage();
 
   useEffect(() => {
@@ -20,10 +21,12 @@ export function CreateForm({ editingTask, tags, onSave, onCancel }: CreateFormPr
       setDescription(editingTask.description);
       setType(editingTask.to_do_type as 'one_time' | 'always' | 'progress');
       setTagId(editingTask.task_tag || '');
+      setNote(editingTask.note || '');
     } else {
       setDescription('');
       setType('one_time');
       setTagId('');
+      setNote('');
     }
   }, [editingTask]);
 
@@ -36,11 +39,13 @@ export function CreateForm({ editingTask, tags, onSave, onCancel }: CreateFormPr
       description,
       to_do_type: type,
       task_tag: tagId || null,
+      note,
     });
 
     setDescription('');
     setType('one_time');
     setTagId('');
+    setNote('');
   };
 
   return (
@@ -61,6 +66,20 @@ export function CreateForm({ editingTask, tags, onSave, onCancel }: CreateFormPr
             rows={1}
             required
             placeholder={t('taskManager.taskDescription')}
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
+            {t('taskStore.note')}
+          </label>
+          <textarea
+            value={note}
+            onChange={(e) => setNote(e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+            rows={5}
+            required
+            placeholder={t('taskStore.note')}
           />
         </div>
 

@@ -50,6 +50,7 @@ export interface ToDoTask {
   task_tag: string | null;
   archived: boolean;
   user_id: string; // Supabase auth user ID
+  note: string | null;
 }
 
 export type PartOfSpeech = 'noun' | 'verb' | 'adjective' | 'adverb' | 'preposition' | 'conjunction' | 'pronoun' | 'interjection' | 'article' | 'determiner' | 'numeral' | 'exclamation' | 'other';
